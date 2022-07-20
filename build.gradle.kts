@@ -5,7 +5,7 @@ plugins {
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
 
-group = "io.test_gear"
+group = "io.test-gear"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -26,7 +26,7 @@ tasks.withType(JavaCompile::class) {
 }
 
 configure(subprojects) {
-    group = "io.test_gear"
+    group = "io.test-gear"
     version = version
 
     apply(plugin = "signing")
@@ -101,8 +101,8 @@ configure(subprojects) {
     }
 
     repositories {
-        mavenLocal()
         mavenCentral()
+        mavenLocal()
     }
 
     publishing.publications.named<MavenPublication>("maven") {
@@ -113,6 +113,6 @@ configure(subprojects) {
 }
 
 repositories {
-    mavenLocal()
     mavenCentral()
+    mavenLocal()
 }

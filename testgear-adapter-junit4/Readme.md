@@ -10,7 +10,7 @@ Add this dependency to your project's POM:
 
 ```xml
 <dependency>
-    <groupId>io.test_gear</groupId>
+    <groupId>io.test-gear</groupId>
     <artifactId>testgear-adapter-junit4</artifactId>
     <version>LATEST_VERSION</version>
     <scope>compile</scope>
@@ -22,7 +22,7 @@ Add this dependency to your project's POM:
 Add this dependency to your project's build file:
 
 ```groovy
-implementation "io.test_gear:testgear-adapter-junit4:LATEST_VERSION"
+implementation "io.test-gear:testgear-adapter-junit4:LATEST_VERSION"
 ```
 
 ## Usage
@@ -48,12 +48,12 @@ implementation "io.test_gear:testgear-adapter-junit4:LATEST_VERSION"
             <version>1.6.3</version>
         </dependency>
         <dependency>
-            <groupId>io.test_gear</groupId>
+            <groupId>io.test-gear</groupId>
             <artifactId>testgear-java-commons</artifactId>
             <version>LATEST_VERSION</version>
         </dependency>
         <dependency>
-            <groupId>io.test_gear</groupId>
+            <groupId>io.test-gear</groupId>
             <artifactId>testgear-adapter-junit4</artifactId>
             <version>LATEST_VERSION</version>
         </dependency>
@@ -142,8 +142,8 @@ repositories {
 
 dependencies {
     testImplementation 'org.aspectj:aspectjrt:1.9.7'
-    testImplementation "io.test_gear:testgear-adapter-junit4:$LATEST_VERSION"
-    testImplementation "io.test_gear:testgear-java-commons:$LATEST_VERSION"
+    testImplementation "io.test-gear:testgear-adapter-junit4:$LATEST_VERSION"
+    testImplementation "io.test-gear:testgear-java-commons:$LATEST_VERSION"
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.junit.platform:junit-platform-runner:1.6.3'
     aspectConfig "org.aspectj:aspectjweaver:1.9.7"
@@ -221,7 +221,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import io.test_gear.listener.BaseJunit4Runner;
 import io.test_gear.models.LinkItem;
-import io.test_gear.tms.client.TMSClient;
 
 @RunWith(BaseJunit4Runner.class)
 public class SampleTest {

@@ -10,7 +10,7 @@ Add this dependency to your project's POM:
 
 ```xml
 <dependency>
-    <groupId>io.test_gear</groupId>
+    <groupId>io.test-gear</groupId>
     <artifactId>testgear-adapter-junit5</artifactId>
     <version>LATEST_VERSION</version>
     <scope>compile</scope>
@@ -22,7 +22,7 @@ Add this dependency to your project's POM:
 Add this dependency to your project's build file:
 
 ```groovy
-implementation "io.test_gear:testgear-adapter-junit5:LATEST_VERSION"
+implementation "io.test-gear:testgear-adapter-junit5:LATEST_VERSION"
 ```
 
 ## Usage
@@ -48,12 +48,12 @@ implementation "io.test_gear:testgear-adapter-junit5:LATEST_VERSION"
             <version>5.7.0</version>
         </dependency>
         <dependency>
-            <groupId>io.test_gear</groupId>
+            <groupId>io.test-gear</groupId>
             <artifactId>testgear-java-commons</artifactId>
             <version>LATEST_VERSION</version>
         </dependency>
         <dependency>
-            <groupId>io.test_gear</groupId>
+            <groupId>io.test-gear</groupId>
             <artifactId>testgear-adapter-junit5</artifactId>
             <version>LATEST_VERSION</version>
         </dependency>
@@ -147,8 +147,8 @@ repositories {
 
 dependencies {
     testImplementation 'org.aspectj:aspectjrt:1.9.7'
-    testImplementation "io.test_gear:testgear-adapter-junit:$LATEST_VERSION"
-    testImplementation "io.test_gear:testgear-java-commons:$LATEST_VERSION"
+    testImplementation "io.test-gear:testgear-adapter-junit:$LATEST_VERSION"
+    testImplementation "io.test-gear:testgear-java-commons:$LATEST_VERSION"
     testImplementation "org.junit.jupiter:junit-jupiter-api:5.6.0"
     testImplementation "org.junit.jupiter:junit-jupiter-engine:5.6.0"
     testImplementation "org.junit.jupiter:junit-jupiter-params:5.6.0"
@@ -224,7 +224,6 @@ Description of methods:
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import io.test_gear.models.LinkItem;
-import io.test_gear.tms.client.TMSClient;
 
 public class SimpleTest {
 
