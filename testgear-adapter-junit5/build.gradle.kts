@@ -1,4 +1,4 @@
-description = "Test Gear JUnit 5 Integration"
+description = "TestGear JUnit 5 Integration"
 
 plugins {
     id("java")

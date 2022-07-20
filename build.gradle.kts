@@ -44,7 +44,7 @@ configure(subprojects) {
                 }
                 pom {
                     name.set(project.name)
-                    description.set("Module ${project.name} of Test Gear Framework.")
+                    description.set("Module ${project.name} of TestGear Framework.")
                     url.set("https://github.com/TestGear-TMS/adapters-java")
                     licenses {
                         license {

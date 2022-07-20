@@ -1,4 +1,4 @@
-# Test Gear TMS adapter for TestNG
+# TestGear TMS adapter for TestNG
 
 ## Getting Started
 
@@ -193,8 +193,8 @@ Annotations can be used to specify information about autotest.
 
 Description of Annotations (\* - required):
 - `WorkItemID` - linking an autotest to a test case
-- \*`DisplayName` - name of the autotest in the Test Gear system
-- \*`ExternalID` - ID of the autotest within the project in the Test Gear System
+- \*`DisplayName` - name of the autotest in the TestGear system
+- \*`ExternalID` - ID of the autotest within the project in the TestGear System
 - `Title` - title in the autotest card and the step card
 - `Description` - description in the autotest card and the step card
 - `Labels` - tags in the autotest card

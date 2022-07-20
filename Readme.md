@@ -1,4 +1,4 @@
-# Test Gear Java Integrations
+# TestGear Java Integrations
 The repository contains new versions of adaptors for JVM-based test frameworks.
 
 Supported test frameworks :
