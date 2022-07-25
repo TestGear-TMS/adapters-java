@@ -7,8 +7,12 @@
     </listeners>
     <test name="All">
         <classes>
-            <class name="io.test_gear.samples.FullBeforeAfterTests" >
-            </class>
+            <class name="io.test_gear.samples.FullBeforeAfterTests"/>
+            <class name="io.test_gear.samples.OnlyBeforeAfterAllTests"/>
+            <class name="io.test_gear.samples.OnlyBeforeAfterEachTests"/>
+            <class name="io.test_gear.samples.failed.FullBeforeAfterTests"/>
+            <class name="io.test_gear.samples.failed.OnlyBeforeAfterAllTests"/>
+            <class name="io.test_gear.samples.failed.OnlyBeforeAfterEachTests"/>
         </classes>
     </test>
 </suite>
