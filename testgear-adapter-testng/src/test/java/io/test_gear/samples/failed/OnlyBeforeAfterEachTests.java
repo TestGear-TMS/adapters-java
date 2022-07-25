@@ -88,7 +88,7 @@ public class OnlyBeforeAfterEachTests {
             @Link(url = "https://dumps.example.com/module/issue/5", title = "Issue-5", type = LinkType.ISSUE),
     })
     public void allAnnotationsTest() {
-        Adapter.link("Test 1", "Desc 1", LinkType.ISSUE, "https://test-gear.io/");
+        Adapter.addLink("https://test-gear.io/", "Test 1", "Desc 1", LinkType.ISSUE);
         createProject();
         enterProject();
         createSection();

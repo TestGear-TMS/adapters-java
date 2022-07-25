@@ -202,7 +202,11 @@ Description of Annotations (\* - required):
 - `Step` - the designation of the step
 
 Description of methods:
-- `Adapter.link` - links in the autotest result
+- `Adapter.addLink` - link in the autotest result
+- `Adapter.addLinks` - links in the autotest result
+- `Adapter.addAttachment` - attachment in the autotest result
+- `Adapter.addAttachments` - attachments in the autotest result
+- `Adapter.addMessage` - message in the autotest result
 
 ### Examples
 
@@ -228,6 +232,7 @@ public class SampleTests {
     private void step1() {
         step2();
         Assert.assertTrue(true);
+        Adapter.addMessage("Message");
     }
 
     @Step
@@ -235,6 +240,7 @@ public class SampleTests {
     @Description("Step 2 description")
     private void step2() {
         Assert.assertTrue(true);
+        Adapter.addAttachment("/Users/user/screen.json");
     }
 
     @Test
@@ -249,7 +255,7 @@ public class SampleTests {
 
     public void simpleTest2() {
         step1();
-        Adapter.link("Test 2", "Desc 2", LinkType.DEFECT, "https://test-gear.io/123");
+        Adapter.addLink("https://test-gear.io/123", "Test 1", "Desc 1", LinkType.ISSUE);
         Assert.assertTrue(true);
     }
 }

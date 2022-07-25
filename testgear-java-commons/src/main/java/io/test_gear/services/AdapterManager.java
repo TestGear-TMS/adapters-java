@@ -10,9 +10,7 @@ import io.test_gear.writers.Writer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -33,6 +31,16 @@ public class AdapterManager {
         ApiClient client = new TmsApiClient(clientConfiguration);
 
         writer = new HttpWriter(clientConfiguration, client, storage);
+    }
+
+    public AdapterManager(
+            ThreadContext threadContext,
+            ResultStorage storage,
+            Writer writer
+    ) {
+        this.threadContext = threadContext;
+        this.storage = storage;
+        this.writer = writer;
     }
 
     public void startTests() {
@@ -455,5 +463,26 @@ public class AdapterManager {
         step.setStop(System.currentTimeMillis());
 
         threadContext.stop();
+    }
+
+    public void addAttachments(List<String> attachments){
+        List<String> uuids = new ArrayList<>();
+        for (final String attachment : attachments) {
+            uuids.add(writer.writeAttachment(attachment));
+        }
+
+        final Optional<String> current = threadContext.getCurrent();
+        if (!current.isPresent()) {
+            LOGGER.error("Could not add attachment: no test is running");
+            return;
+        }
+
+        storage.get(current.get(), ResultWithAttachments.class).ifPresent(
+                result -> {
+                    synchronized (storage) {
+                        result.getAttachments().addAll(uuids);
+                    }
+                }
+        );
     }
 }

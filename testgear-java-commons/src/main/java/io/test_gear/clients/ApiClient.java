@@ -21,4 +21,6 @@ public interface ApiClient {
     void linkAutoTestToWorkItem(String id, String workItemId) throws ApiException;
 
     void sendTestResults(String testRunUuid, List<AutoTestResultsForTestRunModel> models) throws ApiException;
+
+    String addAttachment(String path) throws ApiException;
 }

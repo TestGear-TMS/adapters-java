@@ -1,8 +1,8 @@
-package io.test_gear.writers;
+package io.test_gear;
 
 import io.test_gear.client.model.*;
-import io.test_gear.models.LinkType;
 import io.test_gear.models.*;
+import io.test_gear.models.LinkType;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -212,7 +212,7 @@ public class Helper {
         return fixtureResult;
     }
 
-    public static AutoTestStepModel generateBeforeEachSetup() {
+    public static AutoTestStepModel generateBeforeEachSetup(){
         AutoTestStepModel model = new AutoTestStepModel();
 
         model.setTitle(BEFORE_EACH_NAME);
@@ -222,7 +222,7 @@ public class Helper {
         return model;
     }
 
-    public static AutoTestStepModel generateAfterEachSetup() {
+    public static AutoTestStepModel generateAfterEachSetup(){
         AutoTestStepModel model = new AutoTestStepModel();
 
         model.setTitle(AFTER_EACH_NAME);
@@ -264,7 +264,7 @@ public class Helper {
         return fixtureResult;
     }
 
-    public static AutoTestStepModel generateBeforeAllSetup() {
+    public static AutoTestStepModel generateBeforeAllSetup(){
         AutoTestStepModel model = new AutoTestStepModel();
 
         model.setTitle(BEFORE_ALL_NAME);
@@ -274,7 +274,7 @@ public class Helper {
         return model;
     }
 
-    public static AutoTestStepModel generateAfterAllSetup() {
+    public static AutoTestStepModel generateAfterAllSetup(){
         AutoTestStepModel model = new AutoTestStepModel();
 
         model.setTitle(AFTER_ALL_NAME);

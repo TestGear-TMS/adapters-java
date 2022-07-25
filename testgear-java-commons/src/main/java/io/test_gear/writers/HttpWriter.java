@@ -30,19 +30,21 @@ public class HttpWriter implements Writer {
 
     @Override
     public void startLaunch() {
-        if (!Objects.equals(this.config.getTestRunId(), "null")) {
-            return;
-        }
+        synchronized (config) {
+            if (!Objects.equals(this.config.getTestRunId(), "null")) {
+                return;
+            }
 
-        TestRunV2PostShortModel model = new TestRunV2PostShortModel();
-        model.setProjectId(UUID.fromString(config.getProjectId()));
+            TestRunV2PostShortModel model = new TestRunV2PostShortModel();
+            model.setProjectId(UUID.fromString(config.getProjectId()));
 
-        try {
-            TestRunV2GetModel response = apiClient.createTestRun(model);
-            this.config.setTestRunId(response.getId().toString());
+            try {
+                TestRunV2GetModel response = apiClient.createTestRun(model);
+                this.config.setTestRunId(response.getId().toString());
 
-        } catch (ApiException e) {
-            LOGGER.error("Can not start the launch: ".concat(e.getMessage()));
+            } catch (ApiException e) {
+                LOGGER.error("Can not start the launch: ".concat(e.getMessage()));
+            }
         }
     }
 
@@ -201,6 +203,17 @@ public class HttpWriter implements Writer {
             apiClient.sendTestResults(config.getTestRunId(), results);
         } catch (ApiException e) {
             LOGGER.error("Can not write the test results: ".concat(e.getMessage()));
+        }
+    }
+
+    @Override
+    public String writeAttachment(String path) {
+        try {
+            return apiClient.addAttachment(path);
+        } catch (ApiException e) {
+            LOGGER.error("Can not write attachment: ".concat(e.getMessage()));
+
+            return "";
         }
     }
 }
