@@ -15,14 +15,14 @@ public class Label {
         return this.name;
     }
 
-    // TODO Make set method as builder
-
     /**
      * Sets name.
      *
      * @param name the value
+     * @return self for method chaining
      */
-    public void setName(final String name) {
+    public Label setName(final String name) {
         this.name = name;
+        return this;
     }
 }

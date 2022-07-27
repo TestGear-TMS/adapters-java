@@ -3,7 +3,6 @@ package io.test_gear.listener;
 import io.test_gear.annotations.*;
 import org.junit.runner.Description;
 
-import io.test_gear.annotations.*;
 import io.test_gear.models.LinkItem;
 import java.util.LinkedList;
 import java.util.List;
@@ -48,8 +47,8 @@ public class Utils {
         final Labels annotation = method.getAnnotation(Labels.class);
         if (annotation != null) {
             for (final String s : annotation.value()) {
-                final Label label = new Label();
-                label.setName(s);
+                final Label label = new Label()
+                        .setName(s);
                 labels.add(label);
             }
         }
