@@ -45,8 +45,8 @@ public class Utils {
         final Labels annotation = method.getAnnotation(Labels.class);
         if (annotation != null) {
             for (final String s : annotation.value()) {
-                final Label label = new Label();
-                label.setName(s);
+                final Label label = new Label()
+                        .setName(s);
                 labels.add(label);
             }
         }
