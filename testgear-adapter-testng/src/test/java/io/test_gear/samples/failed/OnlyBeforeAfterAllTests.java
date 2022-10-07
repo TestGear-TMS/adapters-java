@@ -1,12 +1,10 @@
 package io.test_gear.samples.failed;
 
 import io.test_gear.annotations.*;
-import io.test_gear.services.Adapter;
 import org.testng.Assert;
 import org.testng.annotations.*;
-
-import io.test_gear.annotations.*;
 import io.test_gear.models.LinkType;
+import io.test_gear.services.Adapter;
 
 public class OnlyBeforeAfterAllTests {
     @BeforeClass
@@ -75,7 +73,7 @@ public class OnlyBeforeAfterAllTests {
     @Test
     @ExternalId("failed_BeforeAll_AfterAll_with_all_annotations")
     @DisplayName("Failed test with all annotations")
-    @WorkItemId("123")
+    @WorkItemIds("123")
     @Title("Title in the autotest card")
     @Description("Test with BeforeAll, AfterAll and all annotations")
     @Labels({"Tag1","Tag2"})
@@ -88,7 +86,7 @@ public class OnlyBeforeAfterAllTests {
             @Link(url = "https://dumps.example.com/module/issue/5", title = "Issue-5", type = LinkType.ISSUE),
     })
     public void allAnnotationsTest() {
-        Adapter.addLink("https://test-gear.io/", "Test 1", "Desc 1", LinkType.ISSUE);
+       Adapter.addLinks("https://testgear.ru/", "Test 1","Desc 1", LinkType.ISSUE);
         authorization();
         createProject();
         enterProject();

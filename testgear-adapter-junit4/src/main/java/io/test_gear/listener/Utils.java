@@ -1,39 +1,57 @@
 package io.test_gear.listener;
 
 import io.test_gear.annotations.*;
+import io.test_gear.models.Label;
+import io.test_gear.models.LinkItem;
 import org.junit.runner.Description;
 
-import io.test_gear.models.LinkItem;
+import javax.xml.bind.DatatypeConverter;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import io.test_gear.models.Label;
 
 public class Utils {
 
     public static String extractExternalID(final Description method) {
         final ExternalId annotation = method.getAnnotation(ExternalId.class);
-        return (annotation != null) ? annotation.value() : null;
+        return (annotation != null) ? annotation.value() : getHash(method.getMethodName());
     }
 
     public static String extractDisplayName(final Description method) {
         final DisplayName annotation = method.getAnnotation(DisplayName.class);
-        return (annotation != null) ? annotation.value() : null;
+        return (annotation != null) ? annotation.value() : method.getMethodName();
     }
 
-    public static String extractWorkItemId(final Description method) {
-        final WorkItemId annotation = method.getAnnotation(WorkItemId.class);
-        return (annotation != null) ? annotation.value() : null;
+    public static List<String> extractWorkItemId(final Description method) {
+        final List<String> workItemIds = new ArrayList<>();
+        final WorkItemId workItem = method.getAnnotation(WorkItemId.class);
+        if (workItem != null) {
+            workItemIds.add(workItem.value());
+
+            return workItemIds;
+        }
+
+        final WorkItemIds workItems = method.getAnnotation(WorkItemIds.class);
+        if (workItems != null) {
+            for (final String workItemId : workItems.value()) {
+                workItemIds.add(workItemId);
+            }
+        }
+
+        return workItemIds;
     }
 
     public static List<LinkItem> extractLinks(final Description method) {
-        final List<LinkItem> links = new LinkedList<LinkItem>();
+        final List<LinkItem> links = new LinkedList<>();
         final Links linksAnnotation = method.getAnnotation(Links.class);
         if (linksAnnotation != null) {
             for (final Link link : linksAnnotation.links()) {
                 links.add(makeLink(link));
             }
-        }
-        else {
+        } else {
             final Link linkAnnotation = method.getAnnotation(Link.class);
             if (linkAnnotation != null) {
                 links.add(makeLink(linkAnnotation));
@@ -43,7 +61,7 @@ public class Utils {
     }
 
     public static List<Label> extractLabels(final Description method) {
-        final List<Label> labels = new LinkedList<Label>();
+        final List<Label> labels = new LinkedList<>();
         final Labels annotation = method.getAnnotation(Labels.class);
         if (annotation != null) {
             for (final String s : annotation.value()) {
@@ -57,7 +75,15 @@ public class Utils {
 
     public static String extractTitle(final Description method) {
         final Title annotation = method.getAnnotation(Title.class);
-        return (annotation != null) ? annotation.value() : null;
+
+        String title;
+        if (annotation == null) {
+            title = method.getClassName();
+        } else {
+            title = annotation.value();
+        }
+
+        return title;
     }
 
     private static LinkItem makeLink(final Link linkAnnotation) {
@@ -70,6 +96,17 @@ public class Utils {
 
     public static String extractDescription(final Description method) {
         final io.test_gear.annotations.Description annotation = method.getAnnotation(io.test_gear.annotations.Description.class);
-        return (annotation != null) ? annotation.value() : null;
+        return (annotation != null) ? annotation.value() : "";
+    }
+
+    private static String getHash(String value) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            md.update(value.getBytes(StandardCharsets.UTF_8));
+            byte[] digest = md.digest();
+            return DatatypeConverter.printHexBinary(digest);
+        } catch (NoSuchAlgorithmException e) {
+            return value;
+        }
     }
 }

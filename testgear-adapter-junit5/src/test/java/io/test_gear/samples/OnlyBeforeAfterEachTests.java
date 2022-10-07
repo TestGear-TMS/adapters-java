@@ -2,11 +2,9 @@ package io.test_gear.samples;
 
 import io.test_gear.annotations.*;
 import io.test_gear.annotations.DisplayName;
+import io.test_gear.models.LinkType;
 import io.test_gear.services.Adapter;
 import org.junit.jupiter.api.*;
-
-import io.test_gear.annotations.*;
-import io.test_gear.models.LinkType;
 
 public class OnlyBeforeAfterEachTests {
     @BeforeEach
@@ -74,8 +72,8 @@ public class OnlyBeforeAfterEachTests {
 
     @Test
     @ExternalId("BeforeEach_AfterEach_with_all_annotations")
-    @DisplayName("Test with all annotations")
-    @WorkItemId("456")
+    @io.test_gear.annotations.DisplayName("Test with all annotations")
+    @WorkItemIds("456")
     @Title("Title in the autotest card")
     @Description("Test with BeforeEach, AfterEach and all annotations")
     @Labels({"Tag1","Tag2"})
@@ -88,7 +86,7 @@ public class OnlyBeforeAfterEachTests {
             @Link(url = "https://dumps.example.com/module/issue/5", title = "Issue-5", type = LinkType.ISSUE),
     })
     public void allAnnotationsTest() {
-        Adapter.addLink("https://test-gear.io/", "Test 1", "Desc 1", LinkType.ISSUE);
+       Adapter.addLinks("https://testgear.ru/", "Test 1","Desc 1", LinkType.ISSUE);
         createProject();
         enterProject();
         createSection();

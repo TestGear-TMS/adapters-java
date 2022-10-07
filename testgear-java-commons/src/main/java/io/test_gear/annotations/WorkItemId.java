@@ -5,8 +5,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * @deprecated This annotation is no longer acceptable to compute time between versions.
+ * <p> Use {@link WorkItemIds} instead.
+ */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD})
+@Target({ ElementType.METHOD })
+@Deprecated
 public @interface WorkItemId {
     String value();
 }
+
+

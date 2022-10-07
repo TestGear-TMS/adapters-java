@@ -1,16 +1,19 @@
 package io.test_gear.aspects;
 
-import io.test_gear.annotations.Step;
 import io.test_gear.models.ItemStatus;
 import io.test_gear.models.StepResult;
-import io.test_gear.services.Adapter;
-import io.test_gear.services.AdapterManager;
-import io.test_gear.services.Utils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
+import io.test_gear.annotations.Step;
+import io.test_gear.services.Adapter;
+import io.test_gear.services.AdapterManager;
+import io.test_gear.services.Utils;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Aspect
@@ -36,10 +39,22 @@ public class StepAspect {
         final MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         final String uuid = UUID.randomUUID().toString();
         Method method = signature.getMethod();
+        Parameter[] parameters = method.getParameters();
+        Map<String, String> stepParameters = new HashMap<>();
+
+        for (int i = 0; i < parameters.length; i++) {
+            final Parameter parameter = parameters[i];
+
+            String name = parameter.getName();
+            String value = joinPoint.getArgs()[i].toString();
+
+            stepParameters.put(name, value);
+        }
 
         final StepResult result = new StepResult()
-                .setName(Utils.extractTitle(method))
-                .setDescription(Utils.extractDescription(method));
+                .setName(Utils.extractTitle(method, stepParameters))
+                .setDescription(Utils.extractDescription(method, stepParameters))
+                .setParameters(stepParameters);
 
         getManager().startStep(uuid, result);
     }
@@ -59,7 +74,7 @@ public class StepAspect {
         getManager().stopStep();
     }
 
-    private AdapterManager getManager() {
+    private AdapterManager getManager(){
         return adapterManager.get();
     }
 }
