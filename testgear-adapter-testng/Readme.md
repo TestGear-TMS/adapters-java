@@ -1,40 +1,42 @@
-# TestGear TMS adapter for TestNG
+# TestGear TMS Adapter for TestNG
+![TestGear](https://raw.githubusercontent.com/TestGear-TMS/adapters-python/master/images/banner.png)
 
 ## Getting Started
 
 ### Installation
 
-#### Maven users
+#### Maven Users
 
-Add this dependency to your project's POM:
+Add this dependency to your project POM:
 
 ```xml
 <dependency>
     <groupId>io.test-gear</groupId>
     <artifactId>testgear-adapter-testng</artifactId>
-    <version>LATEST_VERSION</version>
+    <version>1.1.0</version>
     <scope>compile</scope>
 </dependency>
 ```
 
-#### Gradle users
+#### Gradle Users
 
-Add this dependency to your project's build file:
+Add this dependency to your project build file:
 
 ```groovy
-implementation "io.test-gear:testgear-adapter-testng:LATEST_VERSION"
+implementation "io.test-gear:testgear-adapter-testng:1.1.0"
 ```
 
 ## Usage
 
-#### Maven users
+#### Maven Users
 
-1. Add this dependency to your project's POM:
+1. Add this dependency to your project POM:
     ````xml
      <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <aspectj.version>1.9.7</aspectj.version>
+        <adapter.version>1.1.0</adapter.version>
     </properties>
     <dependencies>
         <dependency>
@@ -45,12 +47,12 @@ implementation "io.test-gear:testgear-adapter-testng:LATEST_VERSION"
         <dependency>
             <groupId>io.test-gear</groupId>
             <artifactId>testgear-adapter-testng</artifactId>
-            <version>LATEST_VERSION</version>
+            <version>${adapter.version}</version>
         </dependency>
            <dependency>
             <groupId>io.test-gear</groupId>
             <artifactId>testgear-java-commons</artifactId>
-            <version>LATEST_VERSION</version>
+            <version>${adapter.version}</version>
         </dependency>
         <dependency>
             <groupId>org.aspectj</groupId>
@@ -105,11 +107,11 @@ implementation "io.test-gear:testgear-adapter-testng:LATEST_VERSION"
         </plugins>
     </build>
     ````
-2. Press "Reload All Maven Projects" button
+2. Press the **Reload All Maven Projects** button.
 
-#### Gradle users
+#### Gradle Users
 
-1. Add this dependency to your project's build file:
+1. Add this dependency to your project build file:
 ```groovy
 plugins {
    id 'java'
@@ -136,8 +138,8 @@ repositories {
 
 dependencies {
     testImplementation 'org.aspectj:aspectjrt:1.9.7'
-    testImplementation "io.test-gear:testgear-adapter-testng:$LATEST_VERSION"
-    testImplementation "io.test-gear:testgear-java-commons:$LATEST_VERSION"
+    testImplementation "io.test-gear:testgear-adapter-testng:1.1.0"
+    testImplementation "io.test-gear:testgear-java-commons:1.1.0"
     testImplementation 'org.testng:testng:7.5'
     aspectConfig "org.aspectj:aspectjweaver:1.9.7"
 }
@@ -148,75 +150,139 @@ test {
         def weaver = configurations.aspectConfig.find { it.name.contains("aspectjweaver") }
         jvmArgs += "-javaagent:$weaver"
     }
+    // to enable command line options, specify the option that will be passed like this:
+    // systemProperty '<parameter_name>', System.getProperty('<parameter_name>')
+    // for example:
+    // systemProperty 'tmsTestRunName', System.getProperty('tmsTestRunName') 
 }
 ```
-2. Press "Reload All Gradle Projects" button
+2. Press the **Reload All Gradle Projects** button.
 
 ### Configuration
 
-Create **testgear.properties** file in the resource directory of the project or set environment variables (environment variables take precedence over file variables):
-``` 
-URL={%URL%}
-PrivateToken={%USER_PRIVATE_TOKEN%} 
-ProjectId={%PROJECT_ID%} 
-ConfigurationId={%CONFIGURATION_ID%}
-TestRunId={%TEST_RUN_ID%}
+#### File
+
+1. Create **testgear.properties** file in the resource directory of the project:
+    ``` 
+    url={%URL%}
+    privateToken={%USER_PRIVATE_TOKEN%} 
+    projectId={%PROJECT_ID%} 
+    configurationId={%CONFIGURATION_ID%}
+    testRunId={%TEST_RUN_ID%}
+    testRunName={%TEST_RUN_NAME%}
+    adapterMode={%ADAPTER_MODE%}
+    ```
+2. Fill parameters with your configuration, where:
+   * `URL` - location of the TMS instance.
+   * `USER_PRIVATE_TOKEN` - API secret key. To do that:
+      1. Go to the `https://{DOMAIN}/user-profile` profile.
+      2. Copy the API secret key.
+         
+   * `PROJECT_ID` - ID of a project in TMS instance.
+      1. Create a project.
+      2. Open DevTools > Network.
+      3. Go to the project `https://{DOMAIN}/projects/20/tests`.
+      4. GET-request project, Preview tab, copy iID field.
+   * `CONFIGURATION_ID` - ID of a configuration in TMS instance.
+      1. Create a project.
+      2. Open DevTools > Network.
+      3. Go to the project `https://{DOMAIN}/projects/20/tests`.
+      4. GET-request configurations, Preview tab, copy id field.
+         
+   * `TEST_RUN_ID` - ID of the created test-run in TMS instance. `TEST_RUN_ID` is optional. If it is not provided, it is created automatically.
+     
+   * `TEST_RUN_NAME` - name of the new test-run.`TEST_RUN_NAME` is optional. If it is not provided, it is created automatically.
+     
+   * `ADAPTER_MODE` - adapter mode. Default value - 0. The adapter supports following modes:
+      * 0 - in this mode, the adapter filters tests by test run ID and configuration ID, and sends the results to the test run.
+      * 1 - in this mode, the adapter sends all results to the test run without filtering.
+      * 2 - in this mode, the adapter creates a new test run and sends results to the new test run.
+        
+        
+#### ENV
+
+You can use environment variables (environment variables take precedence over file variables):
+
+* `TMS_URL` - location of the TMS instance.
+  
+* `TMS_PRIVATE_TOKEN` - API secret key.
+  
+* `TMS_PROJECT_ID` - ID of a project in TMS instance.
+  
+* `TMS_CONFIGURATION_ID` - ID of a configuration in TMS instance.
+
+* `TMS_ADAPTER_MODE` - adapter mode. Default value - 0.
+  
+* `TMS_TEST_RUN_ID` - ID of the created test-run in TMS instance. `TMS_TEST_RUN_ID` is optional. If it is not provided, it is created automatically.
+  
+* `TMS_TEST_RUN_NAME` - name of the new test-run.`TMS_TEST_RUN_NAME` is optional. If it is not provided, it is created automatically.
+  
+* `TMS_CONFIG_FILE` - name of the configuration file. `TMS_CONFIG_FILE` is optional. If it is not provided, it is used default file name.
+  
+  
+#### Command line
+
+You also can CLI variables (CLI variables take precedence over environment variables):
+
+* `tmsUrl` - location of the TMS instance.
+  
+* `tmsPrivateToken` - API secret key.
+  
+* `tmsProjectId` - ID of a project in TMS instance.
+  
+* `tmsConfigurationId` - ID of a configuration in TMS instance.
+
+* `tmsAdapterMode` - adapter mode. Default value - 0.
+
+* `tmsTestRunId` - ID of the created test-run in TMS instance. `tmsTestRunId` is optional. If it is not provided, it is created automatically.
+  
+* `tmsTestRunName` - name of the new test-run.`tmsTestRunName` is optional. If it is not provided, it is created automatically.
+  
+* `tmsConfigFile` - name of the configuration file. `tmsConfigFile` is optional. If it is not provided, it is used default file name.
+
+#### Examples
+
+##### Gradle
 ```
-And fill parameters with your configuration, where:  
-`URL` - location of the TMS instance  
-`USER_PRIVATE_TOKEN` - API secret key  
+gradle test -DtmsUrl=http://localhost:8080 -DtmsPrivateToken=Token -DtmsProjectId=f5da5bab-380a-4382-b36f-600083fdd795 -DtmsConfigurationId=3a14fa45-b54e-4859-9998-cc502d4cc8c6
+-DtmsAdapterMode=0 -DtmsTestRunId=a17269da-bc65-4671-90dd-d3e3da92af80 -DtmsTestRunName=Regress
+```
 
-1. go to the https://{DOMAIN}/user-profile profile  
-2. copy the API secret key
-
-`PROJECT_ID` - id of project in TMS instance
-
-1. create a project
-2. open DevTools -> network
-3. go to the project https://{DOMAIN}/projects/20/tests
-4. GET-request project, Preview tab, copy id field  
-
-`CONFIGURATION_ID` - id of configuration in TMS instance  
-
-1. create a project  
-2. open DevTools -> network  
-3. go to the project https://{DOMAIN}/projects/20/tests  
-4. GET-request configurations, Preview tab, copy id field  
-
-`TEST_RUN_ID` - id of the created test-run in TMS instance  
-
-> TEST_RUN_ID is optional. If it's not provided than it create automatically.
+##### Maven
+```
+maven test -DtmsUrl=http://localhost:8080 -DtmsPrivateToken=Token -DtmsProjectId=f5da5bab-380a-4382-b36f-600083fdd795 -DtmsConfigurationId=3a14fa45-b54e-4859-9998-cc502d4cc8c6
+-DtmsAdapterMode=0 -DtmsTestRunId=a17269da-bc65-4671-90dd-d3e3da92af80 -DtmsTestRunName=Regress
+```
 
 ### Annotations
 
-Annotations can be used to specify information about autotest.
+Use annotations to specify information about autotest.
 
-Description of Annotations (\* - required):
-- `WorkItemID` - linking an autotest to a test case
-- \*`DisplayName` - name of the autotest in the TestGear system
-- \*`ExternalID` - ID of the autotest within the project in the TestGear System
-- `Title` - title in the autotest card and the step card
-- `Description` - description in the autotest card and the step card
-- `Labels` - tags in the autotest card
-- `Link` - links in the autotest card
-- `Step` - the designation of the step
+Description of annotations:
+- `WorkItemIds` - linking an autotest to a test case.
+- `DisplayName` - name of the autotest in TMS.
+- `ExternalId` - ID of the autotest within the project in TMS.
+- `Title` - title in the autotest card and the step card.
+- `Description` - description in the autotest card and the step card.
+- `Labels` - tags in the autotest card.
+- `Links` - links in the autotest card.
+- `Step` - the designation of the step.
 
 Description of methods:
-- `Adapter.addLink` - link in the autotest result
-- `Adapter.addLinks` - links in the autotest result
-- `Adapter.addAttachment` - attachment in the autotest result
-- `Adapter.addAttachments` - attachments in the autotest result
-- `Adapter.addMessage` - message in the autotest result
+- `Adapter.addLinks` - add links to the autotest result.
+- `Adapter.addAttachments` - add attachments to the autotest result.
+- `Adapter.addMessage` - add message to the autotest result.
 
 ### Examples
 
+#### Simple test
+
 ```java
 
-import io.test_gear.models.LinkItem;
+import io.test-gear.models.LinkItem;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
-@Test()
 public class SampleTests {
 
     @Test
@@ -246,17 +312,65 @@ public class SampleTests {
     @Test
     @ExternalId("Simple_test_2")
     @DisplayName("Simple test 2")
-    @WorkItemId("12345")
+    @WorkItemIds({"12345", "54321"})
     @Title("Simple test 2")
     @Description("Simple test 2 description")
     @Links(links = {@Link(url = "www.1.ru", title = "firstLink", description = "firstLinkDesc", type = LinkType.RELATED),
             @Link(url = "www.3.ru", title = "thirdLink", description = "thirdLinkDesc", type = LinkType.ISSUE),
             @Link(url = "www.2.ru", title = "secondLink", description = "secondLinkDesc", type = LinkType.BLOCKED_BY)})
-
     public void simpleTest2() {
         step1();
-        Adapter.addLink("https://test-gear.io/123", "Test 1", "Desc 1", LinkType.ISSUE);
+        Adapter.addLinks("https://testgear.ru/", "Test 1", "Desc 1", LinkType.ISSUE);
         Assert.assertTrue(true);
+    }
+}
+```
+
+#### Parameterized test
+
+```java
+package io.test-gear.samples;
+
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
+import io.test-gear.models.LinkType;
+
+import java.util.stream.Stream;
+
+public class ParameterizedTests {
+
+    @ParameterizedTest
+    @ValueSource(shorts = {1, 2, 3})
+    @ExternalId("Parameterized_test_with_one_parameter_{number}")
+    @DisplayName("Test with number = {number} parameter")
+    @WorkItemIds("{number}")
+    @Title("Title in the autotest card {number}")
+    @Description("Test with BeforeEach, AfterEach and all annotations {number}")
+    @Labels({"Tag{number}"})
+    void testWithOneParameter(int number) {
+
+    }
+
+    @ParameterizedTest
+    @MethodSource("arguments")
+    @ExternalId("Parameterized_test_with_multiple_parameters_{number}")
+    @DisplayName("Parameterized test with number = {number}, title = {title}, expected = {expected}, url = {url}")
+    @Links(links = {
+            @Link(url = "https://{url}/module/repository", title = "{title} Repository", description = "Example of repository", type = LinkType.REPOSITORY),
+            @Link(url = "https://{url}/module/projects", title = "{title} Projects", type = LinkType.REQUIREMENT),
+            @Link(url = "https://{url}/module/", type = LinkType.BLOCKED_BY),
+            @Link(url = "https://{url}/module/docs", title = "{title} Documentation", type = LinkType.RELATED),
+            @Link(url = "https://{url}/module/JCP-777", title = "{title} JCP-777", type = LinkType.DEFECT),
+            @Link(url = "https://{url}/module/issue/5", title = "{title} Issue-5", type = LinkType.ISSUE),
+    })
+    void testWithMultipleParameters(int number, String title, boolean expected, String url) {
+    }
+
+    static Stream<Arguments> arguments() {
+        return Stream.of(
+                Arguments.of(1, "Test version 1", true, "google.com"),
+                Arguments.of(2, "Test version 2", false, "yandex.ru")
+        );
     }
 }
 ```
@@ -265,12 +379,11 @@ public class SampleTests {
 
 You can help to develop the project. Any contributions are **greatly appreciated**.
 
-* If you have suggestions for adding or removing projects, feel free to [open an issue](https://github.com/TestGear-TMS/adapters-java/issues/new) to discuss it, or directly create a pull request after you edit the *README.md* file with necessary changes.
-* Please make sure you check your spelling and grammar.
+* If you have suggestions for adding or removing projects, feel free to [open an issue](https://github.com/TestGear-TMS/adapters-java/issues/new) to discuss it, or create a direct pull request after you edit the *README.md* file with necessary changes.
+* Make sure to check your spelling and grammar.
 * Create individual PR for each suggestion.
-* Please also read through the [Code Of Conduct](https://github.com/TestGear-TMS/adapters-java/blob/main/CODE_OF_CONDUCT.md) before posting your first idea as well.
+* Read the [Code Of Conduct](https://github.com/TestGear-TMS/adapters-java/blob/main/CODE_OF_CONDUCT.md) before posting your first idea as well.
 
 # License
 
 Distributed under the Apache-2.0 License. See [LICENSE](https://github.com/TestGear-TMS/adapters-java/blob/main/LICENSE.md) for more information.
-

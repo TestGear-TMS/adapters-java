@@ -1,9 +1,9 @@
 package io.test_gear.clients;
 
+import jakarta.ws.rs.core.GenericType;
 import io.test_gear.client.invoker.ApiException;
 import io.test_gear.client.invoker.ApiResponse;
 import io.test_gear.client.invoker.Pair;
-import jakarta.ws.rs.core.GenericType;
 
 import java.io.File;
 import java.nio.file.Files;

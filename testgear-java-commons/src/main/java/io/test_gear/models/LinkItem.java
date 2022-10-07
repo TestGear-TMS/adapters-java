@@ -3,7 +3,8 @@ package io.test_gear.models;
 /**
  * Model object to pass links to external resources.
  */
-public class LinkItem {
+public class LinkItem
+{
     private String title;
     private String url;
     private String description;
