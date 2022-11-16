@@ -1,8 +1,10 @@
 package io.test_gear.samples.failed;
 
-import io.test_gear.annotations.*;
+import org.aspectj.lang.annotation.Before;
 import org.testng.Assert;
 import org.testng.annotations.*;
+import io.test_gear.annotations.*;
+import io.test_gear.models.LinkItem;
 import io.test_gear.models.LinkType;
 import io.test_gear.services.Adapter;
 
@@ -92,7 +94,7 @@ public class FullBeforeAfterTests {
             @Link(url = "https://dumps.example.com/module/issue/5", title = "Issue-5", type = LinkType.ISSUE),
     })
     public void allAnnotationsTest() {
-       Adapter.addLinks("https://testgear.ru/", "Test 1","Desc 1", LinkType.ISSUE);
+       Adapter.addLinks("https://test-gear.io/", "Test 1","Desc 1", LinkType.ISSUE);
         createProject();
         enterProject();
         createSection();

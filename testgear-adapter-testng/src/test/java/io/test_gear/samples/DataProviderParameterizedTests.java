@@ -1,8 +1,8 @@
 package io.test_gear.samples;
 
-import io.test_gear.annotations.*;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import io.test_gear.annotations.*;
 import io.test_gear.models.LinkType;
 
 public class DataProviderParameterizedTests {

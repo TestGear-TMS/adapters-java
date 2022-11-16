@@ -1,12 +1,15 @@
 package io.test_gear.samples.failed;
 
+import org.junit.Test;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.runner.RunWith;
 import io.test_gear.annotations.*;
+import io.test_gear.listener.BaseJunit4Runner;
+import io.test_gear.models.LinkItem;
 import io.test_gear.models.LinkType;
 import io.test_gear.services.Adapter;
-import org.junit.Test;
-import org.junit.Assert;
-import org.junit.runner.RunWith;
-import io.test_gear.listener.BaseJunit4Runner;
 
 @RunWith(BaseJunit4Runner.class)
 public class SampleTests {
@@ -83,7 +86,7 @@ public class SampleTests {
             @Link(url = "https://dumps.example.com/module/issue/5", title = "Issue-5", type = LinkType.ISSUE),
     })
     public void allAnnotationsTest() {
-       Adapter.addLinks("https://testgear.ru/", "Test 1","Desc 1", LinkType.ISSUE);
+       Adapter.addLinks("https://test-gear.io/", "Test 1","Desc 1", LinkType.ISSUE);
         authorization();
         createProject();
         enterProject();

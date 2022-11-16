@@ -1,8 +1,8 @@
 package io.test_gear.samples;
 
-import io.test_gear.annotations.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
+import io.test_gear.annotations.*;
 import io.test_gear.models.LinkType;
 
 import java.util.stream.Stream;

@@ -4,8 +4,8 @@ import io.test_gear.annotations.*;
 import io.test_gear.models.Label;
 import io.test_gear.models.LinkItem;
 
-import javax.xml.bind.DatatypeConverter;
 import java.lang.reflect.Method;
+import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -21,7 +21,7 @@ import static java.util.Objects.isNull;
 public class Utils {
     public static String extractExternalID(final Method atomicTest, Map<String, String> parameters) {
         final ExternalId annotation = atomicTest.getAnnotation(ExternalId.class);
-        return (annotation != null) ? setParameters(annotation.value(), parameters) : getHash(atomicTest.getName());
+        return (annotation != null) ? setParameters(annotation.value(), parameters) : getHash(atomicTest.getDeclaringClass().getName() + atomicTest.getName());
     }
 
     public static String extractDisplayName(final Method atomicTest, Map<String, String> parameters) {
@@ -94,6 +94,10 @@ public class Utils {
         return setParameters(title, parameters);
     }
 
+    public static String toIndentedString(Object o) {
+        return o == null ? "null" : o.toString().replace("\n", "\n    ");
+    }
+
     private static LinkItem makeLink(final Link linkAnnotation, Map<String, String> parameters) {
         return new LinkItem()
                 .setTitle(setParameters(linkAnnotation.title(), parameters))
@@ -141,9 +145,19 @@ public class Utils {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             md.update(value.getBytes(StandardCharsets.UTF_8));
             byte[] digest = md.digest();
-            return DatatypeConverter.printHexBinary(digest);
+            return convertToHex(digest);
         } catch (NoSuchAlgorithmException e) {
             return value;
         }
     }
+
+    private static String convertToHex(final byte[] messageDigest) {
+        BigInteger bigint = new BigInteger(1, messageDigest);
+        String hexText = bigint.toString(16);
+        while (hexText.length() < 32) {
+            hexText = "0".concat(hexText);
+        }
+        return hexText.toUpperCase();
+    }
+
 }

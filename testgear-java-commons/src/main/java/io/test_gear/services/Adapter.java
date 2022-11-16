@@ -1,10 +1,10 @@
 package io.test_gear.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import io.test_gear.models.LinkItem;
 import io.test_gear.models.LinkType;
 import io.test_gear.properties.AppProperties;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -23,7 +23,7 @@ public final class Adapter {
         if (Objects.isNull(adapterManager)) {
             Properties appProperties = AppProperties.loadProperties();
             ConfigManager manager = new ConfigManager(appProperties);
-            adapterManager = new AdapterManager(manager);
+            adapterManager = new AdapterManager(manager.getClientConfiguration(), manager.getAdapterConfig());
         }
         return adapterManager;
     }

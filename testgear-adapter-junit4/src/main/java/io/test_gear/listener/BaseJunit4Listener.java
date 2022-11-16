@@ -1,17 +1,13 @@
 package io.test_gear.listener;
 
-import io.test_gear.models.ClassContainer;
-import io.test_gear.models.ItemStatus;
-import io.test_gear.models.MainContainer;
-import io.test_gear.models.TestResult;
-import io.test_gear.services.Adapter;
-import io.test_gear.services.AdapterManager;
-import io.test_gear.services.ExecutableTest;
 import org.junit.runner.Description;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
-
+import io.test_gear.models.*;
+import io.test_gear.services.ExecutableTest;
+import io.test_gear.services.Adapter;
+import io.test_gear.services.AdapterManager;
 import java.util.UUID;
 import java.util.function.Consumer;
 

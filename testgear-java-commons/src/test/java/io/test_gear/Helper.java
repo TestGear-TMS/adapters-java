@@ -1,7 +1,8 @@
 package io.test_gear;
 
-import io.test_gear.models.*;
 import io.test_gear.client.model.*;
+import io.test_gear.models.*;
+import io.test_gear.models.LinkType;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,7 +22,7 @@ public class Helper {
 
     private final static String LINK_TITLE = "Link title";
     private final static String LINK_DESCRIPTION = "Link description";
-    private final static io.test_gear.models.LinkType LINK_TYPE = io.test_gear.models.LinkType.ISSUE;
+    private final static LinkType LINK_TYPE = LinkType.ISSUE;
     private final static String LINK_URL = "https://example.test/";
 
     private final static String STEP_TITLE = "Step title";

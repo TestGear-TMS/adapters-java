@@ -1,9 +1,9 @@
 package io.test_gear.services;
 
-import io.test_gear.Helper;
-import io.test_gear.models.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import io.test_gear.Helper;
+import io.test_gear.models.*;
 
 import java.util.Optional;
 import java.util.UUID;

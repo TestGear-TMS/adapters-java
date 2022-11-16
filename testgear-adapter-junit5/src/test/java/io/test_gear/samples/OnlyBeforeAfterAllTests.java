@@ -1,10 +1,10 @@
 package io.test_gear.samples;
 
+import org.junit.jupiter.api.*;
 import io.test_gear.annotations.*;
 import io.test_gear.annotations.DisplayName;
 import io.test_gear.models.LinkType;
 import io.test_gear.services.Adapter;
-import org.junit.jupiter.api.*;
 
 public class OnlyBeforeAfterAllTests {
     @BeforeAll
@@ -51,7 +51,7 @@ public class OnlyBeforeAfterAllTests {
     @Title("Create a section")
     @Description("Section was created")
     public void createSection() {
-        Assertions.assertTrue(false);
+        Assertions.assertTrue(true);
     }
 
     @Step
@@ -72,7 +72,7 @@ public class OnlyBeforeAfterAllTests {
 
     @Test
     @ExternalId("BeforeAll_AfterAll_with_all_annotations")
-    @io.test_gear.annotations.DisplayName("Test with all annotations")
+    @DisplayName("Test with all annotations")
     @WorkItemIds("123")
     @Title("Title in the autotest card")
     @Description("Test with BeforeAll, AfterAll and all annotations")
@@ -86,7 +86,7 @@ public class OnlyBeforeAfterAllTests {
             @Link(url = "https://dumps.example.com/module/issue/5", title = "Issue-5", type = LinkType.ISSUE),
     })
     public void allAnnotationsTest() {
-       Adapter.addLinks("https://testgear.ru/", "Test 1","Desc 1", LinkType.ISSUE);
+       Adapter.addLinks("https://test-gear.io/", "Test 1","Desc 1", LinkType.ISSUE);
         authorization();
         createProject();
         enterProject();

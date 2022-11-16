@@ -1,8 +1,8 @@
 package io.test_gear.samples.failed;
 
-import io.test_gear.annotations.*;
-import io.test_gear.annotations.DisplayName;
 import org.junit.jupiter.api.*;
+import io.test_gear.annotations.DisplayName;
+import io.test_gear.annotations.*;
 import io.test_gear.models.LinkType;
 import io.test_gear.services.Adapter;
 
@@ -92,7 +92,7 @@ public class FullBeforeAfterTests {
             @Link(url = "https://dumps.example.com/module/issue/5", title = "Issue-5", type = LinkType.ISSUE),
     })
     public void allAnnotationsTest() {
-       Adapter.addLinks("https://testgear.ru/", "Test 1","Desc 1", LinkType.ISSUE);
+       Adapter.addLinks("https://test-gear.io/", "Test 1","Desc 1", LinkType.ISSUE);
         createProject();
         enterProject();
         createSection();
@@ -104,7 +104,7 @@ public class FullBeforeAfterTests {
     @ExternalId("failed_full_before_after_with_required_annotations")
     @DisplayName("Failed test with required annotations")
     public void requiredAnnotationsTest() {
-        Assertions.assertTrue(true);
+        Assertions.assertTrue(false);
     }
 
     @AfterEach

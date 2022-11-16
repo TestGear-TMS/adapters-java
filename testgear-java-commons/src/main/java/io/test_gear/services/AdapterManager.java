@@ -1,16 +1,18 @@
 package io.test_gear.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import io.test_gear.client.invoker.ApiException;
+import io.test_gear.client.model.TestRunStateTypeModel;
+import io.test_gear.client.model.TestRunV2GetModel;
 import io.test_gear.clients.ApiClient;
 import io.test_gear.clients.ClientConfiguration;
 import io.test_gear.clients.TmsApiClient;
 import io.test_gear.models.*;
-import io.test_gear.writers.HttpWriter;
-import io.test_gear.writers.Writer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import io.test_gear.client.invoker.ApiException;
 import io.test_gear.properties.AdapterConfig;
 import io.test_gear.properties.AdapterMode;
+import io.test_gear.writers.HttpWriter;
+import io.test_gear.writers.Writer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +32,14 @@ public class AdapterManager {
     private final ClientConfiguration clientConfiguration;
     private final AdapterConfig adapterConfig;
 
-    public AdapterManager(ConfigManager configManager) {
-        this.clientConfiguration = configManager.getClientConfiguration();
-        this.adapterConfig = configManager.getAdapterConfig();
+    public AdapterManager(ClientConfiguration clientConfiguration, AdapterConfig adapterConfig) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Client configurations: {}", clientConfiguration);
+            LOGGER.debug("Adapter configurations: {}", adapterConfig);
+        }
+
+        this.clientConfiguration = clientConfiguration;
+        this.adapterConfig = adapterConfig;
         validateAdapterConfig();
         this.storage = Adapter.getResultStorage();
         this.threadContext = new ThreadContext();
@@ -41,14 +48,15 @@ public class AdapterManager {
     }
 
     public AdapterManager(
-            ConfigManager configManager,
+            ClientConfiguration clientConfiguration,
+            AdapterConfig adapterConfig,
             ThreadContext threadContext,
             ResultStorage storage,
             Writer writer,
             ApiClient client
     ) {
-        this.adapterConfig = configManager.getAdapterConfig();
-        this.clientConfiguration = configManager.getClientConfiguration();
+        this.adapterConfig = adapterConfig;
+        this.clientConfiguration = clientConfiguration;
         this.threadContext = threadContext;
         this.storage = storage;
         this.writer = writer;
@@ -56,11 +64,41 @@ public class AdapterManager {
     }
 
     public void startTests() {
-        writer.startLaunch();
+        LOGGER.debug("Start launch");
+
+        synchronized (this.clientConfiguration) {
+            if (!Objects.equals(this.clientConfiguration.getTestRunId(), "null")) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Test run is exist.");
+                }
+                return;
+            }
+
+            try {
+                TestRunV2GetModel response = this.client.createTestRun();
+                this.clientConfiguration.setTestRunId(response.getId().toString());
+
+            } catch (ApiException e) {
+                LOGGER.error("Can not start the launch: ".concat(e.getMessage()));
+            }
+        }
     }
 
     public void stopTests() {
-        writer.finishLaunch();
+        LOGGER.debug("Stop launch");
+
+        try {
+            TestRunV2GetModel testRun = this.client.getTestRun(this.clientConfiguration.getTestRunId());
+
+            if (testRun.getStateName() != TestRunStateTypeModel.COMPLETED) {
+                this.client.completeTestRun(this.clientConfiguration.getTestRunId());
+            }
+        } catch (ApiException e) {
+            if (e.getResponseBody().contains("the StateName is already Completed")) {
+                return;
+            }
+            LOGGER.error("Can not finish the launch: ".concat(e.getMessage()));
+        }
     }
 
     /**
@@ -71,6 +109,10 @@ public class AdapterManager {
     public void startMainContainer(final MainContainer container) {
         container.setStart(System.currentTimeMillis());
         storage.put(container.getUuid(), container);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Start new main container {}", container);
+        }
     }
 
     /**
@@ -86,6 +128,11 @@ public class AdapterManager {
         }
         final MainContainer container = found.get();
         container.setStop(System.currentTimeMillis());
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Stop main container {}", container);
+        }
+
         writer.writeTests(container);
     }
 
@@ -103,6 +150,10 @@ public class AdapterManager {
         });
         container.setStart(System.currentTimeMillis());
         storage.put(container.getUuid(), container);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Start new class container {} for parent {}", container, parentUuid);
+        }
     }
 
     /**
@@ -118,6 +169,11 @@ public class AdapterManager {
         }
         final ClassContainer container = found.get();
         container.setStop(System.currentTimeMillis());
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Stop class container {}", container);
+        }
+
         writer.writeClass(container);
     }
 
@@ -128,6 +184,10 @@ public class AdapterManager {
      * @param update the update function.
      */
     public void updateClassContainer(final String uuid, final Consumer<ClassContainer> update) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Update class container {}", uuid);
+        }
+
         final Optional<ClassContainer> found = storage.getClassContainer(uuid);
         if (!found.isPresent()) {
             LOGGER.error("Could not update class container: container with uuid {} not found", uuid);
@@ -155,6 +215,10 @@ public class AdapterManager {
                 .setStart(System.currentTimeMillis());
 
         threadContext.start(uuid);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Start test case {}", testResult);
+        }
     }
 
     /**
@@ -165,6 +229,10 @@ public class AdapterManager {
     public void scheduleTestCase(final TestResult result) {
         result.setItemStage(ItemStage.SCHEDULED);
         storage.put(result.getUuid(), result);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Schedule test case {}", result);
+        }
     }
 
     /**
@@ -190,6 +258,10 @@ public class AdapterManager {
      * @param update the update function.
      */
     public void updateTestCase(final String uuid, final Consumer<TestResult> update) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Update test case {}", uuid);
+        }
+
         final Optional<TestResult> found = storage.getTestResult(uuid);
         if (!found.isPresent()) {
             LOGGER.error("Could not update test case: test case with uuid {} not found", uuid);
@@ -217,6 +289,11 @@ public class AdapterManager {
                 .setStop(System.currentTimeMillis());
 
         threadContext.clear();
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Stop test case {}", uuid);
+        }
+
         writer.writeTest(testResult);
     }
 
@@ -228,6 +305,10 @@ public class AdapterManager {
      * @param result     the fixture.
      */
     public void startPrepareFixtureAll(final String parentUuid, final String uuid, final FixtureResult result) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Start prepare all fixture {} for parent {}", result, parentUuid);
+        }
+
         storage.getTestsContainer(parentUuid).ifPresent(container -> {
             synchronized (storage) {
                 container.getBeforeMethods().add(result);
@@ -244,6 +325,10 @@ public class AdapterManager {
      * @param result     the fixture.
      */
     public void startTearDownFixtureAll(final String parentUuid, final String uuid, final FixtureResult result) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Start tear down all fixture {} for parent {}", result, parentUuid);
+        }
+
         storage.getTestsContainer(parentUuid).ifPresent(container -> {
             synchronized (storage) {
                 container.getAfterMethods().add(result);
@@ -261,11 +346,16 @@ public class AdapterManager {
      * @param result     the fixture.
      */
     public void startPrepareFixture(final String parentUuid, final String uuid, final FixtureResult result) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Start prepare fixture {} for parent {}", result, parentUuid);
+        }
+
         storage.getClassContainer(parentUuid).ifPresent(container -> {
             synchronized (storage) {
                 container.getBeforeClassMethods().add(result);
             }
         });
+
         startFixture(uuid, result);
     }
 
@@ -277,6 +367,10 @@ public class AdapterManager {
      * @param result     the fixture.
      */
     public void startTearDownFixture(final String parentUuid, final String uuid, final FixtureResult result) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Start tear down fixture {} for parent {}", result, parentUuid);
+        }
+
         storage.getClassContainer(parentUuid).ifPresent(container -> {
             synchronized (storage) {
                 container.getAfterClassMethods().add(result);
@@ -294,11 +388,16 @@ public class AdapterManager {
      * @param result     the fixture.
      */
     public void startPrepareFixtureEachTest(final String parentUuid, final String uuid, final FixtureResult result) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Start prepare for each fixture {} for parent {}", result, parentUuid);
+        }
+
         storage.getClassContainer(parentUuid).ifPresent(container -> {
             synchronized (storage) {
                 container.getBeforeEachTest().add(result);
             }
         });
+
         startFixture(uuid, result);
     }
 
@@ -310,6 +409,10 @@ public class AdapterManager {
      * @param result     the fixture.
      */
     public void startTearDownFixtureEachTest(final String parentUuid, final String uuid, final FixtureResult result) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Start tear down for each fixture {} for parent {}", result, parentUuid);
+        }
+
         storage.getClassContainer(parentUuid).ifPresent(container -> {
             synchronized (storage) {
                 container.getAfterEachTest().add(result);
@@ -342,6 +445,10 @@ public class AdapterManager {
      * @param update the update function.
      */
     public void updateFixture(final String uuid, final Consumer<FixtureResult> update) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Update fixture {}", uuid);
+        }
+
         final Optional<FixtureResult> found = storage.getFixture(uuid);
         if (!found.isPresent()) {
             LOGGER.error("Could not update test fixture: test fixture with uuid {} not found", uuid);
@@ -370,6 +477,10 @@ public class AdapterManager {
 
         storage.remove(uuid);
         threadContext.clear();
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Stop fixture {}", fixture);
+        }
     }
 
     /**
@@ -381,7 +492,7 @@ public class AdapterManager {
     public void startStep(final String uuid, final StepResult result) {
         final Optional<String> current = threadContext.getCurrent();
         if (!current.isPresent()) {
-            LOGGER.error("Could not start step: no test case running");
+            LOGGER.error("Could not start step {}: no test case running", uuid);
             return;
         }
         final String parentUuid = current.get();
@@ -396,7 +507,6 @@ public class AdapterManager {
      * @param result     the step.
      */
     public void startStep(final String parentUuid, final String uuid, final StepResult result) {
-
         result.setItemStage(ItemStage.RUNNING)
                 .setStart(System.currentTimeMillis());
 
@@ -408,6 +518,10 @@ public class AdapterManager {
                 parentStep.getSteps().add(result);
             }
         });
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Start step {} for parent {}", result, parentUuid);
+        }
     }
 
     /**
@@ -432,6 +546,10 @@ public class AdapterManager {
      * @param update the update function.
      */
     public void updateStep(final String uuid, final Consumer<StepResult> update) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Update step {}", uuid);
+        }
+
         final Optional<StepResult> found = storage.getStep(uuid);
         if (!found.isPresent()) {
             LOGGER.error("Could not update step: step with uuid {} not found", uuid);
@@ -477,6 +595,10 @@ public class AdapterManager {
 
         storage.remove(uuid);
         threadContext.stop();
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Stop step {}", step);
+        }
     }
 
     public void addAttachments(List<String> attachments) {
@@ -506,7 +628,13 @@ public class AdapterManager {
 
     public List<String> getTestFromTestRun() {
         try {
-            return client.getTestFromTestRun(clientConfiguration.getTestRunId(), clientConfiguration.getConfigurationId());
+            List<String> testsForRun = client.getTestFromTestRun(clientConfiguration.getTestRunId(), clientConfiguration.getConfigurationId());
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("List of tests from test run: {}", testsForRun);
+            }
+
+            return testsForRun;
         } catch (ApiException e) {
             LOGGER.error("Could not get tests from test run", e);
         }
