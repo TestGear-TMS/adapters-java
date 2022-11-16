@@ -1,9 +1,9 @@
 package io.test_gear.writers;
 
-import io.test_gear.models.*;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import io.test_gear.client.model.LinkType;
 import io.test_gear.client.model.*;
+import io.test_gear.models.*;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;

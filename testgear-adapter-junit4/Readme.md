@@ -13,7 +13,7 @@ Add this dependency to your project POM:
 <dependency>
     <groupId>io.test_gear</groupId>
     <artifactId>testgear-adapter-junit4</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.5</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -23,7 +23,7 @@ Add this dependency to your project POM:
 Add this dependency to your project build file:
 
 ```groovy
-implementation "io.test_gear:testgear-adapter-junit4:1.1.0"
+implementation "io.test_gear:testgear-adapter-junit4:1.1.5"
 ```
 
 ## Usage
@@ -36,7 +36,7 @@ implementation "io.test_gear:testgear-adapter-junit4:1.1.0"
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <aspectj.version>1.9.7</aspectj.version>
-        <adapter.version>1.1.0</adapter.version>
+        <adapter.version>1.1.5</adapter.version>
     </properties>
     <dependencies>
         <dependency>
@@ -144,8 +144,8 @@ repositories {
 
 dependencies {
     testImplementation 'org.aspectj:aspectjrt:1.9.7'
-    testImplementation "io.test_gear:testgear-adapter-junit4:1.1.0"
-    testImplementation "io.test_gear:testgear-java-commons:1.1.0"
+    testImplementation "io.test_gear:testgear-adapter-junit4:1.1.5"
+    testImplementation "io.test_gear:testgear-java-commons:1.1.5"
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.junit.platform:junit-platform-runner:1.6.3'
     aspectConfig "org.aspectj:aspectjweaver:1.9.7"
@@ -260,6 +260,9 @@ gradle test -DtmsUrl=http://localhost:8080 -DtmsPrivateToken=Token -DtmsProjectI
 maven test -DtmsUrl=http://localhost:8080 -DtmsPrivateToken=Token -DtmsProjectId=f5da5bab-380a-4382-b36f-600083fdd795 -DtmsConfigurationId=3a14fa45-b54e-4859-9998-cc502d4cc8c6
 -DtmsAdapterMode=0 -DtmsTestRunId=a17269da-bc65-4671-90dd-d3e3da92af80 -DtmsTestRunName=Regress
 ```
+
+If you want to enable debug mode then see [How to enable debug logging?](https://github.com/testgear-tms/adapters-java/tree/main/testgear-java-commons)
+
 
 ### Annotations
 

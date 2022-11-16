@@ -1,9 +1,11 @@
 package io.test_gear.listener;
 
-import io.test_gear.models.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.*;
 import org.testng.annotations.Parameters;
 import org.testng.xml.XmlTest;
+import io.test_gear.models.*;
 import io.test_gear.services.Adapter;
 import io.test_gear.services.AdapterManager;
 import io.test_gear.services.ExecutableTest;
@@ -29,6 +31,8 @@ public class BaseTestNgListener implements
         IInvokedMethodListener,
         IConfigurationListener,
         IMethodInterceptor {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(BaseTestNgListener.class);
 
     /**
      * Store current executable test.
@@ -105,7 +109,8 @@ public class BaseTestNgListener implements
                 .setTitle(Utils.extractTitle(method, parameters))
                 .setName(Utils.extractDisplayName(method, parameters))
                 .setClassName(method.getDeclaringClass().getSimpleName())
-                .setSpaceName((method.getDeclaringClass().getPackage() == null)
+                .setSpaceName((method.getDeclaringClass().getPackage() == null
+                        || method.getDeclaringClass().getPackage().getName().equals(""))
                         ? null : method.getDeclaringClass().getPackage().getName())
                 .setLinkItems(Utils.extractLinks(method, parameters))
                 .setDescription(Utils.extractDescription(method, parameters))
@@ -127,7 +132,6 @@ public class BaseTestNgListener implements
         );
 
         final Class<?>[] parameterTypes = method.getParameterTypes();
-
         if (parameterTypes.length != parameters.length) {
             return testParameters;
         }
@@ -150,7 +154,9 @@ public class BaseTestNgListener implements
 
             final int indexFromAnnotation = i - skippedCount;
             if (indexFromAnnotation < providedNames.length) {
-                testParameters.put(providedNames[indexFromAnnotation], parameters[i].toString());
+                if (parameters[i] != null) {
+                    testParameters.put(providedNames[indexFromAnnotation], parameters[i].toString());
+                }
                 continue;
             }
 
@@ -383,7 +389,7 @@ public class BaseTestNgListener implements
 
     @Override
     public List<IMethodInstance> intercept(List<IMethodInstance> methods, ITestContext context) {
-        if (!adapterManager.isFilteredMode()){
+        if (!adapterManager.isFilteredMode()) {
             return methods;
         }
 
@@ -393,14 +399,34 @@ public class BaseTestNgListener implements
             String externalId = Utils.extractExternalID(method.getMethod().getConstructorOrMethod().getMethod(), null);
 
             if (externalId.matches("\\{.*}")) {
-                return filterTestWithParameters(testsForRun, externalId);
+                boolean include = filterTestWithParameters(testsForRun, externalId);
+
+                if (LOGGER.isDebugEnabled()) {
+                    if (include) {
+                        LOGGER.debug("Test {} include for run", externalId);
+                    } else {
+                        LOGGER.debug("Test {} exclude for run", externalId);
+                    }
+                }
+
+                return include;
             }
 
-            return testsForRun.contains(externalId);
+            boolean include = testsForRun.contains(externalId);
+
+            if (LOGGER.isDebugEnabled()) {
+                if (include) {
+                    LOGGER.debug("Test {} include for run", externalId);
+                } else {
+                    LOGGER.debug("Test {} exclude for run", externalId);
+                }
+            }
+
+            return include;
         }).collect(Collectors.toList());
     }
 
-    private boolean filterTestWithParameters(List<String> testsForRun, String externalId){
+    private boolean filterTestWithParameters(List<String> testsForRun, String externalId) {
         Pattern pattern = Pattern.compile(externalId.replaceAll("\\{.*}", ".*"));
 
         for (String test : testsForRun) {

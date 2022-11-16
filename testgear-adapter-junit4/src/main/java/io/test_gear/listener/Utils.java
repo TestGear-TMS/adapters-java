@@ -1,9 +1,9 @@
 package io.test_gear.listener;
 
+import org.junit.runner.Description;
 import io.test_gear.annotations.*;
 import io.test_gear.models.Label;
 import io.test_gear.models.LinkItem;
-import org.junit.runner.Description;
 
 import javax.xml.bind.DatatypeConverter;
 import java.nio.charset.StandardCharsets;
@@ -17,7 +17,7 @@ public class Utils {
 
     public static String extractExternalID(final Description method) {
         final ExternalId annotation = method.getAnnotation(ExternalId.class);
-        return (annotation != null) ? annotation.value() : getHash(method.getMethodName());
+        return (annotation != null) ? annotation.value() : getHash(method.getClassName() + method.getMethodName());
     }
 
     public static String extractDisplayName(final Description method) {

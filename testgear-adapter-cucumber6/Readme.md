@@ -13,7 +13,7 @@ Add this dependency to your project POM:
 <dependency>
     <groupId>io.test_gear</groupId>
     <artifactId>testgear-adapter-cucumber6</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.5</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -23,7 +23,7 @@ Add this dependency to your project POM:
 Add this dependency to your project build file:
 
 ```groovy
-implementation "io.test_gear:testgear-adapter-cucumber6:1.1.0"
+implementation "io.test_gear:testgear-adapter-cucumber6:1.1.5"
 ```
 
 ## Usage
@@ -37,7 +37,7 @@ implementation "io.test_gear:testgear-adapter-cucumber6:1.1.0"
      <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <adapter.version>1.1.0</adapter.version>
+        <adapter.version>1.1.5</adapter.version>
         <gherkin.version>18.0.0</gherkin.version>
         <cucumber.version>6.11.0</cucumber.version>
     </properties>
@@ -92,7 +92,7 @@ implementation "io.test_gear:testgear-adapter-cucumber6:1.1.0"
      <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <adapter.version>1.1.0</adapter.version>
+        <adapter.version>1.1.5</adapter.version>
         <gherkin.version>18.0.0</gherkin.version>
         <cucumber.version>6.11.0</cucumber.version>
     </properties>
@@ -146,7 +146,7 @@ implementation "io.test_gear:testgear-adapter-cucumber6:1.1.0"
      <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <adapter.version>1.1.0</adapter.version>
+        <adapter.version>1.1.5</adapter.version>
         <gherkin.version>18.0.0</gherkin.version>
         <cucumber.version>6.11.0</cucumber.version>
     </properties>
@@ -223,8 +223,8 @@ def cucumberVersion = "6.10.2"
 def cucumberGherkinVersion = "18.0.0"
 
 dependencies {
-    testImplementation "io.test_gear:testgear-adapter-cucumber6:1.1.0"
-    testImplementation "io.test_gear:testgear-java-commons:1.1.0"
+    testImplementation "io.test_gear:testgear-adapter-cucumber6:1.1.5"
+    testImplementation "io.test_gear:testgear-java-commons:1.1.5"
     testImplementation 'org.testng:testng:7.5'
     testImplementation("io.cucumber:gherkin:$cucumberGherkinVersion")
     testImplementation("io.cucumber:cucumber-core:$cucumberVersion")
@@ -258,8 +258,8 @@ def cucumberVersion = "6.10.2"
 def cucumberGherkinVersion = "18.0.0"
 
 dependencies {
-    testImplementation "io.test_gear:testgear-adapter-cucumber6:1.1.0"
-    testImplementation "io.test_gear:testgear-java-commons:1.1.0"
+    testImplementation "io.test_gear:testgear-adapter-cucumber6:1.1.5"
+    testImplementation "io.test_gear:testgear-java-commons:1.1.5"
     testImplementation("io.cucumber:gherkin:$cucumberGherkinVersion")
     testImplementation("io.cucumber:cucumber-core:$cucumberVersion")
     testImplementation("io.cucumber:cucumber-java:$cucumberVersion")
@@ -296,8 +296,8 @@ def cucumberGherkinVersion = "18.0.0"
 def junit4Version = "4.12"
 
 dependencies {
-    testImplementation "io.test_gear:testgear-adapter-cucumber6:1.1.0"
-    testImplementation "io.test_gear:testgear-java-commons:1.1.0"
+    testImplementation "io.test_gear:testgear-adapter-cucumber6:1.1.5"
+    testImplementation "io.test_gear:testgear-java-commons:1.1.5"
     testImplementation("io.cucumber:gherkin:$cucumberGherkinVersion")
     testImplementation("io.cucumber:cucumber-core:$cucumberVersion")
     testImplementation("io.cucumber:cucumber-java:$cucumberVersion")
@@ -406,6 +406,8 @@ gradle test -DtmsUrl=http://localhost:8080 -DtmsPrivateToken=Token -DtmsProjectI
 maven test -DtmsUrl=http://localhost:8080 -DtmsPrivateToken=Token -DtmsProjectId=f5da5bab-380a-4382-b36f-600083fdd795 -DtmsConfigurationId=3a14fa45-b54e-4859-9998-cc502d4cc8c6
 -DtmsAdapterMode=0 -DtmsTestRunId=a17269da-bc65-4671-90dd-d3e3da92af80 -DtmsTestRunName=Regress
 ```
+
+If you want to enable debug mode then see [How to enable debug logging?](https://github.com/testgear-tms/adapters-java/tree/main/testgear-java-commons)
 
 ### Tags
 

@@ -1,5 +1,8 @@
 package io.test_gear.annotations;
 
+import io.test_gear.models.LinkType;
+import io.test_gear.services.Adapter;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
