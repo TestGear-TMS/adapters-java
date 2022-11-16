@@ -24,7 +24,7 @@ dependencies {
 
 tasks.getByName<Test>("test") {
     useTestNG {}
-//    exclude("**/samples/*")
+    exclude("**/samples/*")
 }
 
 tasks.compileTestJava {
