@@ -1,12 +1,12 @@
 package io.test_gear.listener;
 
-import org.jbehave.core.model.Scenario;
-import org.jbehave.core.model.Story;
-import org.jbehave.core.reporters.NullStoryReporter;
 import io.test_gear.models.*;
 import io.test_gear.services.Adapter;
 import io.test_gear.services.AdapterManager;
 import io.test_gear.services.ExecutableTest;
+import org.jbehave.core.model.Scenario;
+import org.jbehave.core.model.Story;
+import org.jbehave.core.reporters.NullStoryReporter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -127,7 +127,7 @@ public class BaseJbehaveListener extends NullStoryReporter {
         final ExecutableTest test = executableTest.get();
         final String uuid = test.getUuid();
 
-        if (exampleUuids.isEmpty()) {
+        if (exampleUuids.isEmpty() && !test.isAfter()) {
             adapterManager.stopTestCase(uuid);
         } else {
             for (String exampleUuid : exampleUuids) {
@@ -136,6 +136,7 @@ public class BaseJbehaveListener extends NullStoryReporter {
 
             exampleUuids.clear();
         }
+
         adapterManager.stopClassContainer(classUUID.get());
         adapterManager.stopMainContainer(launcherUUID.get());
         executableTest.remove();
@@ -185,5 +186,12 @@ public class BaseJbehaveListener extends NullStoryReporter {
                     }
                 }
         );
+
+        adapterManager.stopTestCase(uuid);
+        executableTest.get().setAfterStatus();
+
+        if (exampleUuids.contains(uuid)) {
+            exampleUuids.remove(uuid);
+        }
     }
 }
