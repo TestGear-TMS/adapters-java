@@ -1,18 +1,21 @@
 package io.test_gear.services;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import io.test_gear.client.invoker.ApiException;
 import io.test_gear.client.model.TestRunStateTypeModel;
 import io.test_gear.client.model.TestRunV2GetModel;
 import io.test_gear.clients.ApiClient;
 import io.test_gear.clients.ClientConfiguration;
 import io.test_gear.clients.TmsApiClient;
+import io.test_gear.listener.AdapterListener;
+import io.test_gear.listener.ListenerManager;
+import io.test_gear.listener.ServiceLoaderListener;
 import io.test_gear.models.*;
 import io.test_gear.properties.AdapterConfig;
 import io.test_gear.properties.AdapterMode;
 import io.test_gear.writers.HttpWriter;
 import io.test_gear.writers.Writer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +35,13 @@ public class AdapterManager {
     private final ClientConfiguration clientConfiguration;
     private final AdapterConfig adapterConfig;
 
+    private final ListenerManager listenerManager;
+
     public AdapterManager(ClientConfiguration clientConfiguration, AdapterConfig adapterConfig) {
+        this(clientConfiguration, adapterConfig, getDefaultListenerManager());
+    }
+    
+    public AdapterManager(ClientConfiguration clientConfiguration, AdapterConfig adapterConfig, ListenerManager listenerManager) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Client configurations: {}", clientConfiguration);
             LOGGER.debug("Adapter configurations: {}", adapterConfig);
@@ -45,6 +54,7 @@ public class AdapterManager {
         this.threadContext = new ThreadContext();
         this.client = new TmsApiClient(this.clientConfiguration);
         this.writer = new HttpWriter(this.clientConfiguration, this.client, this.storage);
+        this.listenerManager = listenerManager;
     }
 
     public AdapterManager(
@@ -53,7 +63,8 @@ public class AdapterManager {
             ThreadContext threadContext,
             ResultStorage storage,
             Writer writer,
-            ApiClient client
+            ApiClient client,
+            ListenerManager listenerManager
     ) {
         this.adapterConfig = adapterConfig;
         this.clientConfiguration = clientConfiguration;
@@ -61,6 +72,7 @@ public class AdapterManager {
         this.storage = storage;
         this.writer = writer;
         this.client = client;
+        this.listenerManager = listenerManager;
     }
 
     public void startTests() {
@@ -284,6 +296,8 @@ public class AdapterManager {
             return;
         }
         final TestResult testResult = found.get();
+
+        listenerManager.beforeTestStop(testResult);
 
         testResult.setItemStage(ItemStage.FINISHED)
                 .setStop(System.currentTimeMillis());
@@ -665,5 +679,10 @@ public class AdapterManager {
                 LOGGER.error(error);
                 throw new RuntimeException(error);
         }
+    }
+
+    private static ListenerManager getDefaultListenerManager() {
+        final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        return new ListenerManager(ServiceLoaderListener.load(AdapterListener.class, classLoader));
     }
 }
