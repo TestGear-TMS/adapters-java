@@ -13,7 +13,7 @@ Add this dependency to your project POM:
 <dependency>
     <groupId>io.test_gear</groupId>
     <artifactId>testgear-adapter-cucumber5</artifactId>
-    <version>1.1.5</version>
+    <version>1.1.8</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -23,7 +23,7 @@ Add this dependency to your project POM:
 Add this dependency to your project build file:
 
 ```groovy
-implementation "io.test_gear:testgear-adapter-cucumber5:1.1.5"
+implementation "io.test_gear:testgear-adapter-cucumber5:1.1.8"
 ```
 
 ## Usage
@@ -37,7 +37,7 @@ implementation "io.test_gear:testgear-adapter-cucumber5:1.1.5"
      <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <adapter.version>1.1.5</adapter.version>
+        <adapter.version>1.1.8</adapter.version>
     </properties>
     <dependencies>
         <dependency>
@@ -90,7 +90,7 @@ implementation "io.test_gear:testgear-adapter-cucumber5:1.1.5"
      <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <adapter.version>1.1.5</adapter.version>
+        <adapter.version>1.1.8</adapter.version>
     </properties>
     <dependencies>
         <dependency>
@@ -154,7 +154,7 @@ implementation "io.test_gear:testgear-adapter-cucumber5:1.1.5"
      <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <adapter.version>1.1.5</adapter.version>
+        <adapter.version>1.1.8</adapter.version>
     </properties>
     <dependencies>
         <dependency>
@@ -229,8 +229,8 @@ def cucumberVersion = "5.1.2"
 def cucumberGherkinVersion = "5.1.0"
 
 dependencies {
-    testImplementation "io.test_gear:testgear-adapter-cucumber5:1.1.5"
-    testImplementation "io.test_gear:testgear-java-commons:1.1.5"
+    testImplementation "io.test_gear:testgear-adapter-cucumber5:1.1.8"
+    testImplementation "io.test_gear:testgear-java-commons:1.1.8"
     testImplementation 'org.testng:testng:7.5'
     testImplementation("io.cucumber:gherkin:$cucumberGherkinVersion")
     testImplementation("io.cucumber:cucumber-core:$cucumberVersion")
@@ -264,8 +264,8 @@ def cucumberVersion = "5.5.0"
 def cucumberGherkinVersion = "5.1.0"
 
 dependencies {
-    testImplementation "io.test_gear:testgear-adapter-cucumber5:1.1.5"
-    testImplementation "io.test_gear:testgear-java-commons:1.1.5"
+    testImplementation "io.test_gear:testgear-adapter-cucumber5:1.1.8"
+    testImplementation "io.test_gear:testgear-java-commons:1.1.8"
     testImplementation("io.cucumber:gherkin:$cucumberGherkinVersion")
     testImplementation("io.cucumber:cucumber-core:$cucumberVersion")
     testImplementation("io.cucumber:cucumber-java:$cucumberVersion")
@@ -302,8 +302,8 @@ def cucumberGherkinVersion = "5.1.0"
 def junit4Version = "4.12"
 
 dependencies {
-    testImplementation "io.test_gear:testgear-adapter-cucumber5:1.1.5"
-    testImplementation "io.test_gear:testgear-java-commons:1.1.5"
+    testImplementation "io.test_gear:testgear-adapter-cucumber5:1.1.8"
+    testImplementation "io.test_gear:testgear-java-commons:1.1.8"
     testImplementation("io.cucumber:gherkin:$cucumberGherkinVersion")
     testImplementation("io.cucumber:cucumber-core:$cucumberVersion")
     testImplementation("io.cucumber:cucumber-java:$cucumberVersion")
@@ -548,6 +548,9 @@ public class ParameterizedTest {
 Feature: Rule
   Tests that use Rule
 
+
+  @DisplayName=sum:{left}+{right}={result}
+  @ExternalId={result}
   Scenario Outline: Summing
     When Summing <left>+<right>
     Then Result is <result>
