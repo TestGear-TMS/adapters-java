@@ -13,7 +13,7 @@ Add this dependency to your project POM:
 <dependency>
     <groupId>io.test-gear</groupId>
     <artifactId>testgear-adapter-junit5</artifactId>
-    <version>1.1.5</version>
+    <version>1.2.0</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -23,7 +23,7 @@ Add this dependency to your project POM:
 Add this dependency to your project build file:
 
 ```groovy
-implementation "io.test-gear:testgear-adapter-junit5:1.1.5"
+implementation "io.test-gear:testgear-adapter-junit5:1.2.0"
 ```
 
 ## Usage
@@ -36,7 +36,7 @@ implementation "io.test-gear:testgear-adapter-junit5:1.1.5"
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <aspectj.version>1.9.7</aspectj.version>
-        <adapter.version>1.1.5</adapter.version>
+        <adapter.version>1.2.0</adapter.version>
     </properties>
     <dependencies>
         <dependency>
@@ -160,8 +160,8 @@ repositories {
 
 dependencies {
     testImplementation 'org.aspectj:aspectjrt:1.9.7'
-    testImplementation "io.test-gear:testgear-adapter-junit5:1.1.5"
-    testImplementation "io.test-gear:testgear-java-commons:1.1.5"
+    testImplementation "io.test-gear:testgear-adapter-junit5:1.2.0"
+    testImplementation "io.test-gear:testgear-java-commons:1.2.0"
     testImplementation "org.junit.jupiter:junit-jupiter-api:5.6.0"
     testImplementation "org.junit.jupiter:junit-jupiter-engine:5.6.0"
     testImplementation "org.junit.jupiter:junit-jupiter-params:5.6.0"
