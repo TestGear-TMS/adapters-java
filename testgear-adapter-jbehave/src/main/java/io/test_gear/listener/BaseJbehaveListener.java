@@ -1,12 +1,12 @@
 package io.test_gear.listener;
 
+import org.jbehave.core.model.Scenario;
+import org.jbehave.core.model.Story;
+import org.jbehave.core.reporters.NullStoryReporter;
 import io.test_gear.models.*;
 import io.test_gear.services.Adapter;
 import io.test_gear.services.AdapterManager;
 import io.test_gear.services.ExecutableTest;
-import org.jbehave.core.model.Scenario;
-import org.jbehave.core.model.Story;
-import org.jbehave.core.reporters.NullStoryReporter;
 
 import java.util.ArrayList;
 import java.util.List;
