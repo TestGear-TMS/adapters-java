@@ -2,12 +2,12 @@ package io.test_gear.listener;
 
 import io.cucumber.messages.Messages.GherkinDocument.Feature;
 import io.cucumber.plugin.event.TestCase;
-import io.test_gear.models.Label;
-import io.test_gear.models.LinkItem;
-import io.test_gear.models.LinkType;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import io.test_gear.models.Label;
+import io.test_gear.models.LinkItem;
+import io.test_gear.models.LinkType;
 import io.test_gear.services.Utils;
 
 import java.util.*;
@@ -32,7 +32,6 @@ public class TagParser {
     private String description = "";
 
     TagParser(final Feature feature, final TestCase scenario, final Deque<String> tags, Map<String, String> parameters) {
-
         while (tags.peek() != null) {
             final String tag = tags.remove();
 

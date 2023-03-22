@@ -13,7 +13,7 @@ Add this dependency to your project POM:
 <dependency>
     <groupId>io.test_gear</groupId>
     <artifactId>testgear-adapter-junit4</artifactId>
-    <version>1.1.5</version>
+    <version>1.2.0</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -23,7 +23,7 @@ Add this dependency to your project POM:
 Add this dependency to your project build file:
 
 ```groovy
-implementation "io.test_gear:testgear-adapter-junit4:1.1.5"
+implementation "io.test_gear:testgear-adapter-junit4:1.2.0"
 ```
 
 ## Usage
@@ -36,7 +36,7 @@ implementation "io.test_gear:testgear-adapter-junit4:1.1.5"
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <aspectj.version>1.9.7</aspectj.version>
-        <adapter.version>1.1.5</adapter.version>
+        <adapter.version>1.2.0</adapter.version>
     </properties>
     <dependencies>
         <dependency>
@@ -144,8 +144,8 @@ repositories {
 
 dependencies {
     testImplementation 'org.aspectj:aspectjrt:1.9.7'
-    testImplementation "io.test_gear:testgear-adapter-junit4:1.1.5"
-    testImplementation "io.test_gear:testgear-java-commons:1.1.5"
+    testImplementation "io.test_gear:testgear-adapter-junit4:1.2.0"
+    testImplementation "io.test_gear:testgear-java-commons:1.2.0"
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.junit.platform:junit-platform-runner:1.6.3'
     aspectConfig "org.aspectj:aspectjweaver:1.9.7"

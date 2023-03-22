@@ -1,7 +1,9 @@
 package io.test_gear.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import io.test_gear.client.invoker.ApiException;
-import io.test_gear.client.model.TestRunStateTypeModel;
+import io.test_gear.client.model.TestRunState;
 import io.test_gear.client.model.TestRunV2GetModel;
 import io.test_gear.clients.ApiClient;
 import io.test_gear.clients.ClientConfiguration;
@@ -14,8 +16,6 @@ import io.test_gear.properties.AdapterConfig;
 import io.test_gear.properties.AdapterMode;
 import io.test_gear.writers.HttpWriter;
 import io.test_gear.writers.Writer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,7 @@ public class AdapterManager {
     public AdapterManager(ClientConfiguration clientConfiguration, AdapterConfig adapterConfig) {
         this(clientConfiguration, adapterConfig, getDefaultListenerManager());
     }
-    
+
     public AdapterManager(ClientConfiguration clientConfiguration, AdapterConfig adapterConfig, ListenerManager listenerManager) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Client configurations: {}", clientConfiguration);
@@ -102,7 +102,7 @@ public class AdapterManager {
         try {
             TestRunV2GetModel testRun = this.client.getTestRun(this.clientConfiguration.getTestRunId());
 
-            if (testRun.getStateName() != TestRunStateTypeModel.COMPLETED) {
+            if (testRun.getStateName() != TestRunState.COMPLETED) {
                 this.client.completeTestRun(this.clientConfiguration.getTestRunId());
             }
         } catch (ApiException e) {

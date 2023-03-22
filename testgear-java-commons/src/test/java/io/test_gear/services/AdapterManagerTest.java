@@ -1,14 +1,13 @@
 package io.test_gear.services;
 
+import io.test_gear.client.model.TestRunState;
 import io.test_gear.listener.ListenerManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import io.test_gear.Helper;
 import io.test_gear.client.invoker.ApiException;
-import io.test_gear.client.model.TestRunStateTypeModel;
 import io.test_gear.client.model.TestRunV2GetModel;
-import io.test_gear.client.model.TestRunV2PostShortModel;
 import io.test_gear.clients.ApiClient;
 import io.test_gear.clients.ClientConfiguration;
 import io.test_gear.models.*;
@@ -114,7 +113,7 @@ public class AdapterManagerTest {
     void stopTests_WithCompletedTestRun_NoInvokeCompleteHandler() throws ApiException {
         // arrange
         TestRunV2GetModel response = new TestRunV2GetModel();
-        response.setStateName(TestRunStateTypeModel.COMPLETED);
+        response.setStateName(TestRunState.COMPLETED);
 
         when(client.getTestRun(TEST_RUN_ID)).thenReturn(response);
 
@@ -131,7 +130,7 @@ public class AdapterManagerTest {
     void stopTests_WithInProgressTestRun_InvokeCompleteHandler() throws ApiException {
         // arrange
         TestRunV2GetModel response = new TestRunV2GetModel();
-        response.setStateName(TestRunStateTypeModel.INPROGRESS);
+        response.setStateName(TestRunState.INPROGRESS);
 
         when(client.getTestRun(TEST_RUN_ID)).thenReturn(response);
 

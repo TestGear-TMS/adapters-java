@@ -159,5 +159,4 @@ public class Utils {
         }
         return hexText.toUpperCase();
     }
-
 }
