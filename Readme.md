@@ -1,6 +1,13 @@
 # TestGear Java Integrations
 The repository contains new versions of adaptors for JVM-based test frameworks.
 
+## Compatibility
+
+| TestGear | Adapter |
+|----------|---------|
+| 3.5      | 1.1     |
+| 4.0      | 1.2     |
+
 Supported test frameworks :
  1. [TestNG](https://github.com/TestGear-TMS/adapters-java/tree/main/testgear-adapter-testng)
  2. [Junit4](https://github.com/TestGear-TMS/adapters-java/tree/main/testgear-adapter-junit4)
