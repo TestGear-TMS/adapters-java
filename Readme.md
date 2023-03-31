@@ -3,10 +3,10 @@ The repository contains new versions of adaptors for JVM-based test frameworks.
 
 ## Compatibility
 
-| TestGear | Adapter |
-|----------|---------|
-| 3.5      | 1.1     |
-| 4.0      | 1.2     |
+| TestGear | Cucumber | JBehave | JUnit | TestNG |
+|----------|----------|---------|-------|--------|
+| 3.5      | 1.1      | 1.1     | 1.1   | 1.1    |
+| 4.0      | 1.2      | 1.2     | 1.2   | 1.2    |
 
 Supported test frameworks :
  1. [TestNG](https://github.com/TestGear-TMS/adapters-java/tree/main/testgear-adapter-testng)
