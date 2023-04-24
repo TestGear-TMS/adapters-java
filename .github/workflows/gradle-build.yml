@@ -1,0 +1,42 @@
+name: Java CI with Gradle
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "*" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        package: [
+            testgear-adapter-cucumber4,
+            testgear-adapter-cucumber5,
+            testgear-adapter-cucumber6,
+            testgear-adapter-cucumber7,
+            testgear-adapter-jbehave,
+            testgear-adapter-junit4,
+            testgear-adapter-junit5,
+            testgear-adapter-testng,
+            testgear-java-commons
+        ]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 8
+      uses: actions/setup-java@v3
+      with:
+        java-version: '8'
+        distribution: 'temurin'
+    - name: Validate Gradle wrapper
+      uses: gradle/wrapper-validation-action@v1
+    - name: Build with Gradle
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: build
